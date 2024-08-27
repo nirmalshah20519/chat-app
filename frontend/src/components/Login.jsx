@@ -98,7 +98,7 @@ export default function Login({changeAuth, switchFn}) {
                     Back
                   </Button>
                   <Button type="submit" variant="contained" onClick={handleSubmit} color="primary" className="mt-4 bg-blue-500">
-                    Next
+                    Login
                   </Button>
                 </div>
               </>
@@ -117,7 +117,7 @@ export default function Login({changeAuth, switchFn}) {
                   value={formData.email}
                 />
                 <Button type="submit" fullWidth variant="contained" color="primary" className="mt-4 bg-blue-500">
-                  Login
+                  Get Otp
                 </Button>
               </>
             )}

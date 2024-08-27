@@ -1,60 +1,57 @@
-import React, { useState } from "react";
-import { Box, Typography, InputBase, IconButton, Avatar } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Typography, IconButton, Avatar } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ChatIcon from "@mui/icons-material/Chat";
 import InputEmoji from "react-input-emoji";
-import { sendMessage } from "../Services/message.service";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function ChatContainer({
   messages,
   user,
   currChat,
   currFriend,
-  reload
+  setMessages,
+  isOnline,
+  send,
+  small,
+  handleBack
 }) {
+  const [Message, setMessage] = useState("");
+  const messagesEndRef = useRef(null);
+
   const processContent = (content) => {
     const replaced = content.replace(user?.firstName, "you");
     return replaced;
   };
-  const [Message, setMessage] = useState("");
 
-  // const handleMessageChange = (e) =>{
-  //   setMessage(e.target.value)
-  // }
   const handleMessageSend = () => {
-    // console.log(Message);
     const newMessage = {
       content: Message,
       authorId: user?._id,
       chatId: currChat,
+      createdAt: new Date(),
     };
     setMessage("");
-    console.log(newMessage);
-    sendMessage(newMessage)
-      .then((resp) => {
-        console.log(resp);
-        reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    send(newMessage);
   };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         height: "91.5vh",
-        // maxWidth: '600px',
         margin: "0 auto",
         border: "1px solid #ddd",
-        // borderRadius: '8px',
         overflow: "hidden",
       }}
     >
       {currChat !== null ? (
         <>
-          {/* Chat Header */}
           <Box
             sx={{
               padding: "16px",
@@ -63,26 +60,41 @@ export default function ChatContainer({
               display: "flex",
             }}
           >
+            {small && (
+              <IconButton
+                sx={{ mr: 1 }} // Add some right margin to the button
+                onClick={() => handleBack()}
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            )}
             <Avatar
               alt={currFriend?.firstName}
               src={currFriend?.gender === "Male" ? "male.png" : "female.png"}
               sx={{ width: 36, height: 36, mx: 1 }}
             />
-            <Typography variant="h6">
-              {currFriend?.firstName} {currFriend?.lastName}
-            </Typography>
+            <Box>
+              <Typography variant="h6">
+                {currFriend?.firstName} {currFriend?.lastName}
+              </Typography>
+              <Typography
+                variant="caption" // Decreased text size further for the time
+                color="green"
+              >
+                {isOnline(currFriend?._id) && "Online"}
+              </Typography>
+            </Box>
           </Box>
 
-          {/* Chat Messages */}
           <Box
             sx={{
               flex: 1,
               padding: "16px",
               overflowY: "auto",
               backgroundColor: "#e5ddd5",
-              "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar for Chrome, Safari, and Opera
-              "-ms-overflow-style": "none", // Hide scrollbar for IE and Edge
-              "scrollbar-width": "none", // Hide scrollbar for Firefox
+              "&::-webkit-scrollbar": { display: "none" },
+              "-ms-overflow-style": "none",
+              "scrollbar-width": "none",
             }}
           >
             {messages.map((message, index) => (
@@ -139,9 +151,9 @@ export default function ChatContainer({
                 </Box>
               </Box>
             ))}
+            <div ref={messagesEndRef} />
           </Box>
 
-          {/* Input Area */}
           <Box
             sx={{
               padding: "8px 16px",

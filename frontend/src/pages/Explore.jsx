@@ -15,6 +15,7 @@ import {
   Box,
   IconButton,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Navbar from "../components/Navbar";
@@ -26,12 +27,16 @@ import {
   rejectRequest,
   sendRequest,
 } from "../Services/request.service";
+import { getChatIdByFriend } from "../Services/chat.service";
+import { useNavigate } from "react-router-dom";
 
 export default function Explore({ changeAuth, auth }) {
   const [query, setQuery] = useState("");
   const [user, setUser] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [flag, setFlag] = useState(false);
+  const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -43,7 +48,7 @@ export default function Explore({ changeAuth, auth }) {
         setUser(resp);
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data.message);
       });
   }, []);
 
@@ -51,10 +56,10 @@ export default function Explore({ changeAuth, auth }) {
     if (query) {
       searchQuery(query)
         .then((resp) => {
-          setSearchResults(resp.data);
+          setSearchResults(resp?.data);
         })
         .catch((err) => {
-          toast.error(err.response.data.message);
+          toast.error(err.response?.data.message);
         });
     } else {
       setSearchResults([]);
@@ -77,7 +82,7 @@ export default function Explore({ changeAuth, auth }) {
         setFlag((f) => !f);
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data.message);
       });
   };
 
@@ -93,7 +98,7 @@ export default function Explore({ changeAuth, auth }) {
         setFlag((f) => !f);
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data.message);
       });
   };
 
@@ -102,19 +107,29 @@ export default function Explore({ changeAuth, auth }) {
       from,
       to: user.email,
     };
-    console.log(accReq);
+    // console.log(accReq);
     acceptRequest(accReq)
       .then((resp) => {
         toast.success(resp.message);
         setFlag((f) => !f);
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data.message);
       });
   };
 
-  const handleChat = () => {
+  const handleChat = (friend) => {
     // logic to start chat
+    setLoad(true)
+    getChatIdByFriend(friend?._id).then(resp=>{
+      const chatId = resp?.data.chatId;
+      setLoad(false);
+      navigate('/chat',{state:{chatId,friend}})
+
+    }).catch(err=>{
+      toast.error(err.response?.data.message);
+      setLoad(false);
+    })
   }
   return (
     <>
@@ -294,11 +309,11 @@ export default function Explore({ changeAuth, auth }) {
                               color: "white",
                             }}
                           >
-                            <ChatIcon />
+                            {load ? <CircularProgress size={'16px'} /> :<ChatIcon />}
                           </IconButton>
                         ) : (
                           <Button
-                            onClick={() => handleChat(user.email)}
+                            onClick={() => handleChat(user)}
                             sx={{
                               backgroundColor: "blue",
                               "&:hover": {
@@ -308,7 +323,7 @@ export default function Explore({ changeAuth, auth }) {
                               width: "100%",
                             }}
                           >
-                            Chat
+                            {load?<CircularProgress size={'20px'} /> :'Chat'}
                           </Button>
                         )}
                       </>

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Avatar,
+  Box,
   List,
   ListItem,
   ListItemAvatar,
@@ -30,9 +31,9 @@ const timeInterval = (timestamp) => {
   return 'just now'; // If the time difference is less than 1 second
 };
 
-export default function FriendList({ friends, user, handleChatClick, currChat }) {
+export default function FriendList({ friends, user, handleChatClick, currChat, isOnline }) {
   const processContent = (content) => {
-    const replaced = content.replace(user?.firstName, "you");
+    const replaced = content?.replace(user?.firstName, "you");
     return replaced;
   };
   return (
@@ -41,13 +42,13 @@ export default function FriendList({ friends, user, handleChatClick, currChat })
         <div key={index+1}>        
         <ListItem          
           alignItems="flex-start"
-          onClick={()=>handleChatClick(friendData.lastMessage.chatId, friendData.friend)}
-          sx={{ backgroundColor:`${friendData.lastMessage.chatId===currChat?'#eeeeee':'white'}`, my:1, boxShadow:'0.5px 0.5px 15px 1px rgba(0,0,0,0.3)', borderRadius:2 }}
+          onClick={()=>handleChatClick(friendData?.lastMessage.chatId, friendData?.friend)}
+          sx={{ backgroundColor:`${friendData?.lastMessage.chatId===currChat?'#eeeeee':'white'}`, my:1, boxShadow:'0.5px 0.5px 15px 1px rgba(0,0,0,0.3)', borderRadius:2 }}
         >
           <ListItemAvatar>
             <Avatar
-              alt={friendData.friend.firstName}
-              src={friendData.friend?.gender==='Male'?'male.png': "female.png"}
+              alt={friendData?.friend.firstName}
+              src={friendData?.friend?.gender==='Male'?'male.png': "female.png"}
               sx={{ width: 56, height: 56, mx:1}}
             />
           </ListItemAvatar>
@@ -55,7 +56,7 @@ export default function FriendList({ friends, user, handleChatClick, currChat })
           sx={{mx:1}}
             primary={
               <Typography variant="body1" color="text.primary">
-                {`${friendData.friend.firstName} ${friendData.friend.lastName}`}
+                {`${friendData?.friend.firstName} ${friendData?.friend.lastName}`}
               </Typography>
             }
             secondary={
@@ -66,18 +67,27 @@ export default function FriendList({ friends, user, handleChatClick, currChat })
                   color="text.secondary"
                   sx={{ display: "block" }} // Ensures it's displayed as block to stack with time
                 >
-                  {processContent(friendData.lastMessage.content).substring(
+                  {processContent(friendData?.lastMessage.content)?.substring(
                     0,
                     50
                   )}{" "}
-                  {friendData.lastMessage.content.length > 50 && "..."}
+                  {friendData?.lastMessage.content.length > 50 && "..."}
                 </Typography>
+                <Box sx={{display:'flex', justifyContent:'space-between'}}>
+
                 <Typography
                   variant="caption" // Decreased text size further for the time
                   color="text.secondary"
                 >
-                  {timeInterval(friendData.lastMessage.createdAt)}
+                  {timeInterval(friendData?.lastMessage.createdAt)}
                 </Typography>
+                <Typography
+                  variant="caption" // Decreased text size further for the time
+                  color="green"
+                >
+                  {isOnline(friendData?.friend._id) && 'Online'}
+                </Typography>
+                </Box>
               </>
             }
           />

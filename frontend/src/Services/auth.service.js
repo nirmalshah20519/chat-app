@@ -18,9 +18,7 @@ export const token = () => localStorage.getItem("token");
 export const decodeToken = () => {
   const currToken = token(); // Assuming `token()` retrieves the current JWT
   if (!currToken) {
-    alert("Session expired! Redirecting to the login page.");
-    deleteToken(); // Assuming `deleteToken()` removes the JWT from storage
-    window.location.href = "/"; // Redirect to homepage or login page
+    // alert("Session expired! Redirecting to the login page.");
     return null;
   }
   const currUser = jwt_decode(currToken);
@@ -98,6 +96,26 @@ export const getUserByEmail = async (email) => {
   };
   return axios
     .get(baseUrl + `/api/users/getByEmail/${email}`, config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error occurred", error);
+      throw error;
+    });
+};
+
+export const searchQuery = async (query) => {
+  const t = localStorage.getItem("token");
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${t}`,
+    },
+  };
+  return axios
+    .get(baseUrl + `/api/users/search?query=${query}`, config)
     .then((response) => {
       return response.data;
     })

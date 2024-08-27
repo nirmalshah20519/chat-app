@@ -1,5 +1,5 @@
 
-import { AuthenticateUserDto, getAllUsersDto, getUserByEmailDto, getUserSchema, LoginUserDto, validateAndCreateUser, verifyUserDto } from "../DTOs/user.dto.js";
+import { AuthenticateUserDto, getAllUsersDto, getUserByEmailDto, getUserByQueryDto, getUserSchema, LoginUserDto, validateAndCreateUser, verifyUserDto } from "../DTOs/user.dto.js";
 
 export const registerUser = async (req, resp) => {
     try {
@@ -20,9 +20,9 @@ export const registerUser = async (req, resp) => {
 export const verifyUser = async (req, resp) => {
     // debugger;
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const v = await verifyUserDto(req.body);
-        console.log(v);
+        // console.log(v);
         const {code, ...rest} = v;
         resp.status(code).send(rest);
         
@@ -81,6 +81,24 @@ export const getUserById = async (req, resp) => {
     }
 }
 
+export const getUserByQuery = async (req, resp) => {
+    try {
+      
+      const userEmail = req.user.userEmail;
+      // console.log(userEmail);
+      const userName = userEmail.split('@')[0]
+      const r = await getUserByQueryDto(req.query.query, userName);
+      const { code, ...rest } = r;
+      resp.status(code).send(rest);
+    } catch (error) {
+      console.error("Error in getUserByQuery:", error);
+      resp
+        .status(500)
+        .send({ message: "An error occurred while processing the request." });
+    }
+  };
+  
+
 
 //apis for testing
 
@@ -88,7 +106,7 @@ export const getUserById = async (req, resp) => {
 export const getAllUsers = async (req, resp) => {
     try {
         const users = await getAllUsersDto();
-        console.log(users);
+        // console.log(users);
         resp.status(200).send(users);        
     } catch (error) {
         resp.status(500).send({

@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticateUser, getAllUsers, getUserById, loginUser, registerUser, verifyUser } from "../Controllers/userController.js";
+import { authenticateUser, getAllUsers, getUserById, getUserByQuery, loginUser, registerUser, verifyUser } from "../Controllers/userController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
@@ -12,6 +12,7 @@ router.post('/authenticate', authenticateUser);
 
 // Protected route (JWT required)
 router.get('/getByEmail/:email', verifyToken, getUserById);
+router.get('/search', verifyToken, getUserByQuery);
 
 
 // apis for testing

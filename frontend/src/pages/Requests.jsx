@@ -12,6 +12,7 @@ import {
 export default function Requests({ changeAuth, auth }) {
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState([]);
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     const t = decodeToken();
@@ -23,7 +24,7 @@ export default function Requests({ changeAuth, auth }) {
       .catch((err) => {
         toast.error(err.response.data.message);
       });
-  }, []);
+  }, [flag]);
 
   useEffect(() => {
     const t = decodeToken();
@@ -37,18 +38,43 @@ export default function Requests({ changeAuth, auth }) {
       });
   }, []);
 
-  const handleAccept = (requestId) => {
-    // logic to accept
+  const handleReject = (from) => {
+    // logic to reject friend request
+    const rejReq = {
+      from,
+      to: user.email,
+    };
+    console.log(rejReq);
+    rejectRequest(rejReq)
+      .then((resp) => {
+        toast.success(resp.message);
+        setFlag((f) => !f);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
-  const handleReject = (requestId) => {
-    // logic to reject
+  const handleAccept = (from) => {
+    const accReq = {
+      from,
+      to: user.email,
+    };
+    console.log(accReq);
+    acceptRequest(accReq)
+      .then((resp) => {
+        toast.success(resp.message);
+        setFlag((f) => !f);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
     <>
       <Navbar auth={auth} changeAuth={changeAuth} user={user} />
-      <Typography
+      {requests.length >0 && <Typography
         variant="h4"
         sx={{
           fontWeight: "bold",
@@ -58,7 +84,7 @@ export default function Requests({ changeAuth, auth }) {
         }}
       >
         Friend Requests
-      </Typography>
+      </Typography>}
 
       <div className="p-4 flex flex-wrap gap-4">
         {requests.map((request) => (
@@ -78,7 +104,7 @@ export default function Requests({ changeAuth, auth }) {
               </Typography>
               <div className="mt-2 flex justify-between space-x-4">
                 <Button
-                  onClick={() => handleAccept(request._id)}
+                  onClick={() => handleAccept(request.from.email)}
                   sx={{
                     backgroundColor: "green",
                     "&:hover": {
@@ -91,7 +117,7 @@ export default function Requests({ changeAuth, auth }) {
                   Accept
                 </Button>
                 <Button
-                  onClick={() => handleReject(request._id)}
+                  onClick={() => handleReject(request.from.email)}
                   sx={{
                     backgroundColor: "red",
                     "&:hover": {
@@ -107,6 +133,20 @@ export default function Requests({ changeAuth, auth }) {
             </CardContent>
           </Card>
         ))}
+        {requests.length === 0 && (
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              marginTop: 4,
+              width:'100%',
+              color: "white",
+            }}
+          >
+            No new requests
+          </Typography>
+        )}
       </div>
     </>
   );

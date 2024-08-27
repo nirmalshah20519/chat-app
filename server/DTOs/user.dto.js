@@ -3,6 +3,7 @@ import userModel from "../Models/user.model.js";
 import { generateOTP } from "../utils/otp.util.js";
 import jwt from "jsonwebtoken";
 import UserRepository from "../Code/UserRepository.js";
+import requestModel from "../Models/request.model.js";
 
 /*
 {
@@ -159,21 +160,78 @@ export const AuthenticateUserDto = async (authDto) => {
   return Response.success("Login Successful", undefined, token);
 };
 
-export const getUserByEmailDto = async (userEmail) =>{
-    const user = await userModel.findOne({email:userEmail});
-    if(!user){
-        return Response.notFound(`User not found`);
-    }else{
-        return Response.success(`User not found`, user);
+export const getUserByEmailDto = async (userEmail) => {
+  const user = await userModel.findOne({ email: userEmail });
+  if (!user) {
+    return Response.notFound(`User not found`);
+  } else {
+    return Response.success(`User not found`, user);
+  }
+};
+/*
+availability :-
+0 - can add as friend
+1 - request already sent
+2 - request already received
+3 - already friends
+*/
+export const getUserByQueryDto = async (query, userName) => {
+  try {
+    const currentUser = await userModel.findOne({ userName });
+
+    if (!currentUser) {
+      return Response.notFound("Current user not found");
     }
-}
 
+    const users = await userModel.find({
+      $or: [
+        { firstName: { $regex: query, $options: "i" } },
+        { lastName: { $regex: query, $options: "i" } },
+        { userName: { $regex: query, $options: "i" } },
+      ],
+      userName: { $ne: userName },
+      isVerified: true,
+    });
 
+    const updatedUsers = await Promise.all(
+      users.map(async (user) => {
+        const request = await requestModel.findOne({
+          from: currentUser._id,
+          to: user._id,
+        });
 
+        const revRequest = await requestModel.findOne({
+          from: user._id,
+          to: currentUser._id,
+        });
+
+        let availability = 0;
+        if (request || revRequest) {
+          if (request?.isAccepted === true || revRequest?.isAccepted===true) {
+            availability = 3;
+          } else if (request?.isAccepted === false) {
+            availability = 1;
+          }
+          else if (revRequest?.isAccepted === false) {
+            availability = 2;
+          }
+        }
+
+        return {
+          ...user._doc,
+          availability,
+        };
+      })
+    );
+
+    return Response.success("Users found", updatedUsers);
+  } catch (error) {
+    return Response.error(`An error occurred: ${error.message}`);
+  }
+};
 
 // apis for testing
-
-export const getAllUsersDto = async () =>{
-    const users = await userModel.find({isVerified:true});
-    return users
-}
+export const getAllUsersDto = async () => {
+  const users = await userModel.find({ isVerified: true });
+  return users;
+};

@@ -19,7 +19,7 @@ export const sendRequest = async (req, resp) => {
 
 export const acceptRequest = async (req, resp) => {
   try {
-    // Your logic for accepting the request goes here
+    
     const r = await acceptRequestDto(req.body);
     const { code, ...rest } = r;
     resp.status(code).send(rest);
@@ -33,8 +33,8 @@ export const acceptRequest = async (req, resp) => {
 
 export const rejectRequest = async (req, resp) => {
   try {
-    // Your logic for accepting the request goes here
-    const r = await acceptRequestDto(req.body);
+    
+    const r = await rejectRequestDto(req.body);
     const { code, ...rest } = r;
     resp.status(code).send(rest);
   } catch (error) {
@@ -57,3 +57,7 @@ export const getMyRequests = async (req, resp) => {
       .send({ message: "An error occurred while rejecting the request." });
   }
 };
+
+
+
+

@@ -31,7 +31,7 @@ export const acceptRequestDto = async (reqDto) =>{
         return Response.notFound(`Request not found.`);
     }
     req.isAccepted=true;
-    await newReq.save();
+    await req.save();
 
     const chat = new chatModel({
         user1:req.from,
@@ -46,11 +46,12 @@ export const acceptRequestDto = async (reqDto) =>{
     });
     await message.save();
 
-    return Response.success(`Request sent to ${user2.firstName} ${user2.lastName}`);
-}
+    return Response.success(`${u1.firstName} and ${u2.firstName} are now friends.`);
+} 
 
 export const rejectRequestDto = async (reqDto) =>{
     const {from, to} = reqDto;
+    console.log(reqDto);
     const u1 = await userModel.findOne({email:from});
     const u2 = await userModel.findOne({email:to});
     const req = await requestModel.findOne({from:u1._id, to:u2._id});

@@ -7,9 +7,12 @@ import Landing from './pages/Landing';
 import PageNotFound from './pages/PageNotFound'; // Import the PageNotFound component
 import Account from './pages/Account';
 import Requests from './pages/Requests';
+import Explore from './pages/Explore';
+import Chat from './pages/Chat';
+import { decodeToken } from './Services/auth.service';
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState(decodeToken()!==null);
 
   return (
     <Router>
@@ -33,6 +36,8 @@ const App = () => {
               <Route path="/home" element={<Landing changeAuth={setAuth} auth={auth} />} />
               <Route path="/account" element={<Account changeAuth={setAuth} auth={auth} />} />
               <Route path="/requests" element={<Requests changeAuth={setAuth} auth={auth} />} />
+              <Route path="/explore" element={<Explore changeAuth={setAuth} auth={auth} />} />
+              <Route path="/chat" element={<Chat changeAuth={setAuth} auth={auth} />} />
             </>
           )}
           {/* Catch-all route for unknown paths */}

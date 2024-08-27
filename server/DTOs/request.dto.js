@@ -51,7 +51,7 @@ export const acceptRequestDto = async (reqDto) =>{
 
 export const rejectRequestDto = async (reqDto) =>{
     const {from, to} = reqDto;
-    console.log(reqDto);
+    // console.log(reqDto);
     const u1 = await userModel.findOne({email:from});
     const u2 = await userModel.findOne({email:to});
     const req = await requestModel.findOne({from:u1._id, to:u2._id});

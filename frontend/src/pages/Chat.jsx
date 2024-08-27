@@ -30,6 +30,7 @@ import {
 import FriendList from "../components/FriendList";
 import { getChatById, getMyFriends } from "../Services/chat.service";
 import ChatContainer from "../components/ChatContainer";
+import {io} from 'socket.io-client'
 
 export default function Chat({ changeAuth, auth }) {
   const [query, setQuery] = useState("");
@@ -41,10 +42,21 @@ export default function Chat({ changeAuth, auth }) {
   const [friends, setFriends] = useState([]);
   const [flag, setFlag] = useState(false);
   const [fl, setFl] = useState(false);
+  const [socket, setsocket] = useState(null);
 
   const reload = () => {
     setFl((f) => !f);
   };
+
+  useEffect(() => {
+    const socketUrl = process.env.REACT_APP_SOCKET_URL;
+    const newSocket = io(socketUrl);
+    setsocket(socket);
+
+    return () => {
+      newSocket.disconnect()
+    }
+  }, [user])
 
   useEffect(() => {
     if (user) {
@@ -131,6 +143,8 @@ export default function Chat({ changeAuth, auth }) {
         });
     }
   }, [fl]);
+
+  
 
   // const messages = [
   //   { text: "Hello!", time: "10:00 AM", isSender: false },

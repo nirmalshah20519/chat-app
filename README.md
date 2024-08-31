@@ -106,3 +106,7 @@ For any inquiries or feedback, please contact [nirmalshah20519@gmail.com](mailto
 // Replace `your-username`, `your_mongodb_connection_string`, `your_jwt_secret`, `your_backend_port`
 // with your actual details.
 ```
+
+## Keywords
+
+Real-Time Chat App, React Chat Application, Node.js Chat App, MongoDB Chat, REST API, WebSocket, Instant Messaging App, Explore Friends, Real-Time Messaging, Online Chat Application.

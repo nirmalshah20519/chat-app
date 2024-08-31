@@ -69,8 +69,13 @@ const validateUserFields = async (userDto) => {
     emailExists.gender = gender;
     emailExists.lastOtp = otp;
     await emailExists.save();
+    sendEmailWithOtp(
+      emailExists.email,
+      emailExists.lastOtp,
+      "verifyAccount.html"
+    );
     return Response.success(
-      `User Registered Successfully! Kindly enter OTP [${otp}] to verify account`,
+      `User Registered Successfully! Kindly enter OTP to verify account`,
       emailExists
     );
   }
@@ -92,7 +97,7 @@ export const validateAndCreateUser = async (userDto) => {
   try {
     const newUser = new userModel(userDto);
     await newUser.save();
-    console.log('sending mail');
+    console.log("sending mail");
     sendEmailWithOtp(newUser.email, newUser.lastOtp, "verifyAccount.html");
     return Response.success(
       `User Registered Successfully! Kindly enter OTP sent to your email to verify account`,

@@ -4,6 +4,8 @@ import { AuthenticateUserDto, getAllUsersDto, getUserByEmailDto, getUserByQueryD
 export const registerUser = async (req, resp) => {
     try {
         const user = getUserSchema(req.body);
+        // console.log('iiii');
+        debugger;
         const r = await validateAndCreateUser(user)
         const {code, ...rest} = r;
         resp.status(code).send(rest);

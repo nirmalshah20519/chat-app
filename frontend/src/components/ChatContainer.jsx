@@ -25,6 +25,9 @@ export default function ChatContainer({
   };
 
   const handleMessageSend = () => {
+    if (Message.trim() === "") {
+      return;
+    }
     const newMessage = {
       content: Message,
       authorId: user?._id,
@@ -32,6 +35,8 @@ export default function ChatContainer({
       createdAt: new Date(),
     };
     setMessage("");
+    setMessages((p) => [...p, newMessage])
+    // setCurrChatMessages((p) => [...p, resp?.data]);
     send(newMessage);
   };
 

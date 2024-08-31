@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your QuickChat Account</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #4CAF50;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    .content {
+      padding: 30px;
+      color: #333;
+    }
+    .otp {
+      font-size: 32px;
+      color: #4CAF50;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f1f1f1;
+      font-size: 12px;
+      color: #777;
+    }
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+        
+      <h1>QuickChat</h1>
+    </div>
+    <div class="content">
+      <p>Hello,</p>
+      <p>Thank you for signing up with QuickChat! To complete your registration, please use the OTP below to verify your account:</p>
+      <div class="otp">{{OTP}}</div>
+      <p>If you didn't request this, please ignore this email or contact our support team immediately.</p>
+      <p>Enjoy chatting!</p>
+      <p>Best regards,<br>The QuickChat Team</p>
+    </div>
+    <div class="footer">
+      &copy; 2024 QuickChat. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>

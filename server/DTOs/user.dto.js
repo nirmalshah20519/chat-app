@@ -4,6 +4,7 @@ import { generateOTP } from "../utils/otp.util.js";
 import jwt from "jsonwebtoken";
 import UserRepository from "../Code/UserRepository.js";
 import requestModel from "../Models/request.model.js";
+import { sendEmailWithOtp } from "../utils/emailService.js";
 
 /*
 {
@@ -91,8 +92,10 @@ export const validateAndCreateUser = async (userDto) => {
   try {
     const newUser = new userModel(userDto);
     await newUser.save();
+    console.log('sending mail');
+    sendEmailWithOtp(newUser.email, newUser.lastOtp, "verifyAccount.html");
     return Response.success(
-      `User Registered Successfully! Kindly enter OTP [${newUser.lastOtp}] to verify account`,
+      `User Registered Successfully! Kindly enter OTP sent to your email to verify account`,
       newUser
     );
   } catch (error) {
@@ -136,8 +139,8 @@ export const LoginUserDto = async (email) => {
   const newOtp = generateOTP();
   user.lastOtp = newOtp;
   await user.save();
-
-  return Response.success(`Otp sent to your email : ${user.lastOtp}`);
+  sendEmailWithOtp(user.email, user.lastOtp, "loginOtp.html");
+  return Response.success(`OTP sent to your email`);
 };
 
 export const AuthenticateUserDto = async (authDto) => {
@@ -207,12 +210,11 @@ export const getUserByQueryDto = async (query, userName) => {
 
         let availability = 0;
         if (request || revRequest) {
-          if (request?.isAccepted === true || revRequest?.isAccepted===true) {
+          if (request?.isAccepted === true || revRequest?.isAccepted === true) {
             availability = 3;
           } else if (request?.isAccepted === false) {
             availability = 1;
-          }
-          else if (revRequest?.isAccepted === false) {
+          } else if (revRequest?.isAccepted === false) {
             availability = 2;
           }
         }

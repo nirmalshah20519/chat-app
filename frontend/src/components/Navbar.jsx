@@ -63,7 +63,7 @@ export default function Navbar({ switchFn, auth, changeAuth, user }) {
         <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
           <ChatIcon  sx={{ color: "white" }} />
           <Typography variant="h5" sx={{ color: "white" }}>
-             ChatApp
+            QuickChat
           </Typography>
         </div>
 

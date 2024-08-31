@@ -140,8 +140,7 @@ export default function Chat({ changeAuth, auth }) {
       socket.emit("sendMessage", Message, currFriend._id);
       sendMessage(Message)
         .then((resp) => {
-          // console.log(resp);
-          setCurrChatMessages((p) => [...p, resp?.data]);
+          // setCurrChatMessages((p) => [...p, resp?.data]);
           setFriends((f) => {
             return f.map((friend) => {
               if (friend?.lastMessage?.chatId === Message?.chatId) {
@@ -161,7 +160,7 @@ export default function Chat({ changeAuth, auth }) {
   const handleBack = () => {
     setCurrChat(null);
     setCurrFriend(null);
-  }
+  };
 
   const handleSearch = (event) => {
     setQuery(event.target.value);
@@ -177,28 +176,32 @@ export default function Chat({ changeAuth, auth }) {
     <>
       <Navbar auth={auth} changeAuth={changeAuth} user={user} />
       <Grid container sx={{ height: "91.5vh" }}>
-      {(isSmallScreen && currChat === null)&&<Grid
-          item
-          xs={isSmallScreen ? 12 : 3}
-          sx={{
-            borderRight: isSmallScreen ? "none" : "1px solid #ccc",
-            overflowY: "auto",
-            backgroundColor: "whitesmoke",
-          }}
-        >
-          <Box sx={{ padding: 2 }}>
-            <Typography variant="h6">Friends</Typography>
-            <FriendList
-              friends={friends}
-              user={user}
-              handleChatClick={handleChatClick}
-              currChat={currChat}
-              isOnline={isOnline}
-            />
-          </Box>
-        </Grid>}
-        
-        {!(isSmallScreen && currChat === null) && (
+        {/* Friends list for both mobile and desktop screens */}
+        {(currChat === null || !isSmallScreen) && (
+          <Grid
+            item
+            xs={isSmallScreen ? 12 : 3}
+            sx={{
+              borderRight: isSmallScreen ? "none" : "1px solid #ccc",
+              overflowY: "auto",
+              backgroundColor: "whitesmoke",
+            }}
+          >
+            <Box sx={{ padding: 2 }}>
+              <Typography variant="h6">Friends</Typography>
+              <FriendList
+                friends={friends}
+                user={user}
+                handleChatClick={handleChatClick}
+                currChat={currChat}
+                isOnline={isOnline}
+              />
+            </Box>
+          </Grid>
+        )}
+
+        {/* Chat container for both mobile and desktop screens */}
+        {(currChat !== null || !isSmallScreen) && (
           <Grid
             item
             xs={isSmallScreen ? 12 : 9}

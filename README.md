@@ -47,16 +47,9 @@ Description: A screen where users can accept friend requests.
 
 ### 6. Chat Screen
 
-<div style="display: flex; justify-content: space-between ; align-items: center; gap: 0px;">
-
-  <div style="flex: 1; text-align: center;">
-    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.39_e45e378f.jpg" alt="Phone Chat Screen" style="height: 500px;"/>
-  </div>
-
-  <div style="flex: 1; text-align: center;">
-    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.40_6c130f53.jpg" alt="Phone Chat Screen" style="height: 500px;"/>
-  </div>
-</div>
+| Phone Chat Screen 1 | Phone Chat Screen 2 |
+|:-------------------:|:-------------------:|
+| ![Phone Chat Screen 1](screenshots/WhatsApp%20Image%202024-09-01%20at%2001.12.39_e45e378f.jpg) | ![Phone Chat Screen 2](screenshots/WhatsApp%20Image%202024-09-01%20at%2001.12.40_6c130f53.jpg) |
 <p style="height:80px;"><p/>
 
 ![Accept Friend Request Screen](<screenshots/Screenshot (139).png>)

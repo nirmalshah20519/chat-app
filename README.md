@@ -50,11 +50,11 @@ Description: A screen where users can accept friend requests.
 <div style="display: flex; justify-content: space-between ; align-items: center; gap: 0px;">
 
   <div style="flex: 1; text-align: center;">
-    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.39_e45e378f.jpg" alt="Phone Chat Screen" style="height: 600px;"/>
+    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.39_e45e378f.jpg" alt="Phone Chat Screen" style="height: 500px;"/>
   </div>
 
   <div style="flex: 1; text-align: center;">
-    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.40_6c130f53.jpg" alt="Phone Chat Screen" style="height: 600px;"/>
+    <img src="screenshots/WhatsApp Image 2024-09-01 at 01.12.40_6c130f53.jpg" alt="Phone Chat Screen" style="height: 500px;"/>
   </div>
 </div>
 <p style="height:80px;"><p/>

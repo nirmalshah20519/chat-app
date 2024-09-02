@@ -57,7 +57,7 @@ Description: A screen where users can accept friend requests.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/quick-chat.git
+   git clone https://github.com/nirmalshah20519/chat-app.git
    cd quick-chat
    ```
 2. **Install dependencies for both the backend, socket and frontend:**:
